@@ -5,16 +5,12 @@ import style from './ListaDeEventos.module.scss';
 import { useRecoilValue } from 'recoil';
 import { ListaDeEventosState } from '../../state/atom';
 
-const ListaDeEventos: React.FC<{  
-  aoAlterarStatus?: (id: number) => void, 
-  aoDeletarEvento?: (id: number) => void, 
-  aoFiltroAplicado: (data: Date | null) => void 
-}> = ({ aoFiltroAplicado, aoAlterarStatus, aoDeletarEvento }) => {
+const ListaDeEventos: React.FC = () => {
 
-    const eventos = useRecoilValue(ListaDeEventosState);
+  const eventos = useRecoilValue(ListaDeEventosState);
 
   return (<section>
-    <Filtro aoFiltroAplicado={aoFiltroAplicado} />
+    <Filtro />
     <div className={style.Scroll}>
       {eventos.map(evento => (
         <Evento 

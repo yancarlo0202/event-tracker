@@ -5,8 +5,9 @@ import ptBR from './localizacao/ptBR.json'
 import Kalend, { CalendarEvent, CalendarView, OnEventDragFinish } from 'kalend'
 import 'kalend/dist/styles/index.css';
 import { useRecoilValue } from 'recoil';
-import { ListaDeEventosState } from '../../state/atom';
+import { filtroDeEventos, ListaDeEventosState } from '../../state/atom';
 import useAtualizarEvento from '../../state/hooks/useAtualizarEventos';
+import { IFiltroDeEventos } from '../../interfaces/IFIltroDeEventos';
 
 interface IKalendEvento {
   id?: number
@@ -19,7 +20,16 @@ interface IKalendEvento {
 const Calendario: React.FC = () => {
 
   const eventosKalend = new Map<string, IKalendEvento[]>();
-  const eventos = useRecoilValue(ListaDeEventosState);
+      const todosOsEventos = useRecoilValue(ListaDeEventosState);
+      const filtro = useRecoilValue<IFiltroDeEventos>(filtroDeEventos)
+  
+      const eventos = todosOsEventos.filter(evento => {
+        if (!filtro.data) {
+          return true
+        }
+        const ehOMesmoDia = filtro.data.toISOString().slice(0, 10) === evento.inicio.toISOString().slice(0, 10)
+        return ehOMesmoDia
+      })
   const atualizarEvento = useAtualizarEvento()
 
   eventos.forEach(evento => {
